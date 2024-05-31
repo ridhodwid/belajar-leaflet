@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Menampilkan Data dari Geoserver</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" ></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-	<style>
-		html,
-		body,
-		#map {
-			height: 100%;
-			width: 100%;
-			margin: 0px;
-		}
-	</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <style>
+        html,
+        body,
+        #map {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+        }
+    </style>
 </head>
+
 <body>
     <div id="map"></div>
     <script>
-        var map = L.map('map').setView([-7.26862,112.72902], 12);
+        var map = L.map('map').setView([-7.26862, 112.72902], 12);
         // Menyusun url WFS yang akan dipanggil 
-        var rootUrl = 'http://localhost:8080/geoserver/gisdata/ows';
+        var rootUrl = 'http://localhost:8080/geoserver/gisdb/ows';
         var defaultParameters = {
             service: 'WFS',
             version: '1.0.0',
             request: 'GetFeature',
-            typeName: 'gisdata:KOTA_SURABAYA',
+            typeName: 'gisdb:KOTA_SURABAYA',
             outputFormat: 'text/javascript',
-            format_options : 'callback:getJson',
-            SrsName : 'EPSG:4326'
+            format_options: 'callback:getJson',
+            SrsName: 'EPSG:4326'
         };
         var parameters = L.Util.extend(defaultParameters);
         // Mendefinisikan layer WFS
@@ -44,7 +48,16 @@
         });
 
         function handleJson(data) {
-            var WFSLayer = L.geoJson(data).addTo(map);
+            var style_geojson = {
+                "color": "white",
+                "weight": 1,
+                "opacity": 1,
+                "fillColor": "#f03",
+                "fillOpacity": 0.8
+            };
+            var WFSLayer = L.geoJson(data, {
+                style: style_geojson
+            }).addTo(map);
         }
 
         // memasukkan BaseMap ke dalam leaflet
@@ -55,4 +68,5 @@
         }).addTo(map); //mengaktifkan basemaps ke dalam leaflet
     </script>
 </body>
+
 </html>
